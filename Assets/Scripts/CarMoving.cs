@@ -14,7 +14,8 @@ public class CarMoving : MonoBehaviour {
     [SerializeField] private Transform palm;
     [SerializeField] private Transform[] bone3s;
     [SerializeField] private Transform debugCube;
-    private Vector3 baseLocation;
+    private Vector3 basePosition;
+    private Vector3 oriPosition;
 
     private bool fistHolding = false;
     private bool cubeScaled = false;
@@ -25,15 +26,23 @@ public class CarMoving : MonoBehaviour {
     private int palmOpenCount;
 
 
+
     // Start is called before the first frame update
     void Start() {
         //controller = _leapProvider.GetLeapController();
-        baseLocation = palm.position;
+        basePosition = palm.position;
+        oriPosition = transform.position;
         palmOpenCount = _palmOpenCountMax;
     }
 
     // Update is called once per frame
     void Update() {
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            Debug.Log("Space is pressed, reverting the Moving Car's location.");
+            transform.position = oriPosition;
+        }
+        
+
         //if (controller != null && controller.IsConnected) {
         //    Debug.Log("The Controller is connected");
         //    Frame now = controller.Frame();
@@ -96,13 +105,13 @@ public class CarMoving : MonoBehaviour {
             // TODO: Apply force here to the car
             Rigidbody carBody = GetComponent<Rigidbody>();
             if (carBody) {
-                var acceleration = (palm.position - baseLocation) * 75f;
+                var acceleration = (palm.position - basePosition) * 75f;
                 acceleration.y = 0; // ! explicitly remove the y components
                 carBody.AddForce(acceleration, ForceMode.Acceleration);
                 Debug.Log(string.Format("Adding acceleration to car in direction: {0}, {1}, {2}", acceleration.x, acceleration.y, acceleration.z));
             }
         } else {
-            baseLocation = palm.position;
+            basePosition = palm.position;
         }
 
         Debug.Log(string.Format("fistDegree is {0}, are we holding our fist? {1}", fistDegree, fistHolding));
