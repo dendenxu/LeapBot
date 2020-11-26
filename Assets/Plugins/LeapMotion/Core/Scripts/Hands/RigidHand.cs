@@ -79,19 +79,26 @@ namespace Leap.Unity {
             }
 
             if (cube != null) {
-                //Rigidbody cubeBody = cube.GetComponent<Rigidbody>();
+                Rigidbody cubeBody = cube.GetComponent<Rigidbody>();
                 //Rigidbody palmBody = palm.GetComponent<Rigidbody>();
-                cube.position = GetPalmCenter() + new Vector3(0, 0, 0.2f);
-                cube.rotation = GetPalmRotation();
+                Vector3 position = palm.position - palm.forward * 0.2f;
+                Quaternion rotation = palm.rotation;
 
+                if (cubeBody) {
+                    cubeBody.MovePosition(position);
+                    cubeBody.MoveRotation(rotation);
+                }else {
+                    cube.position = position;
+                    cube.rotation = rotation;
+                }
 
                 //Rigidbody carBody = car.GetComponent<Rigidbody>();
                 //carBody.AddForce()
 
-                Debug.Log("Cube!!!!");
+                Debug.Log("Getting the debug cube in front of the RigidHand");
 
             } else {
-                Debug.Log("null!!!!");
+                Debug.Log("null Rigidhand.");
             }
 
         }

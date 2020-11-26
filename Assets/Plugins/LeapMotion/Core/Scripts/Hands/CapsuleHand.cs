@@ -24,9 +24,6 @@ namespace Leap.Unity {
         private static Color[] _leftColorList = { new Color(0.0f, 0.0f, 1.0f), new Color(0.2f, 0.0f, 0.4f), new Color(0.0f, 0.2f, 0.2f) };
         private static Color[] _rightColorList = { new Color(1.0f, 0.0f, 0.0f), new Color(1.0f, 1.0f, 0.0f), new Color(1.0f, 0.5f, 0.0f) };
 
-        private static string[] _handMaterialNames = { "Material/HandMaterial", "Material/AnotherMaterial", "Material/BoxMaterial", "Material/CarMaterial", "Material/GroundMaterial" };
-        private static int _handMaterialNamesIndex = 0;
-
 #pragma warning disable 0649
         [SerializeField]
         private Chirality handedness;
