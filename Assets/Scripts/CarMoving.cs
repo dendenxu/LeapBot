@@ -18,13 +18,18 @@ public class CarMoving : MonoBehaviour {
 
     private bool fistHolding = false;
     private bool cubeScaled = false;
-    public float fistThreshold = 0.085f;
+    private bool shouldApplyForce = false;
+    public float fistThreshold = 0.09f;
+
+    private int _palmOpenCountMax = 10;
+    private int palmOpenCount;
 
 
     // Start is called before the first frame update
     void Start() {
         //controller = _leapProvider.GetLeapController();
         baseLocation = palm.position;
+        palmOpenCount = _palmOpenCountMax;
     }
 
     // Update is called once per frame
@@ -68,10 +73,27 @@ public class CarMoving : MonoBehaviour {
 
         fistHolding = fistDegree < fistThreshold;
 
+        if (!fistHolding) {
+            palmOpenCount--;
+        } else {
+            palmOpenCount = _palmOpenCountMax;
+        }
 
-        if (fistHolding) {
+        shouldApplyForce = palmOpenCount > 0;
+
+
+        if (shouldApplyForce && !cubeScaled) {
+            debugCube.localScale *= 1.5f;
+            cubeScaled = true;
+        } else if (!shouldApplyForce && cubeScaled) {
+            // ! update base location when the first unfolding FixedUpdate is called.
+            
+            debugCube.localScale /= 1.5f;
+            cubeScaled = false;
+        }
+
+        if (shouldApplyForce) {
             // TODO: Apply force here to the car
-
             Rigidbody carBody = GetComponent<Rigidbody>();
             if (carBody) {
                 var acceleration = (palm.position - baseLocation) * 75f;
@@ -79,18 +101,8 @@ public class CarMoving : MonoBehaviour {
                 carBody.AddForce(acceleration, ForceMode.Acceleration);
                 Debug.Log(string.Format("Adding acceleration to car in direction: {0}, {1}, {2}", acceleration.x, acceleration.y, acceleration.z));
             }
-        }
-
-        if (fistHolding && !cubeScaled) {
-
-
-            debugCube.localScale *= 1.5f;
-            cubeScaled = true;
-        } else if (!fistHolding && cubeScaled) {
-            // ! update base location when the first unfolding FixedUpdate is called.
+        } else {
             baseLocation = palm.position;
-            debugCube.localScale /= 1.5f;
-            cubeScaled = false;
         }
 
         Debug.Log(string.Format("fistDegree is {0}, are we holding our fist? {1}", fistDegree, fistHolding));
