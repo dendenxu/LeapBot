@@ -14,6 +14,7 @@ public class CarMoving : MonoBehaviour {
     [SerializeField] private Transform palm;
     [SerializeField] private Transform[] bone3s;
     [SerializeField] private Transform debugCube;
+    private Vector3 baseLocation;
 
     private bool fistHolding = false;
     private bool cubeScaled = false;
@@ -23,6 +24,7 @@ public class CarMoving : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         //controller = _leapProvider.GetLeapController();
+        baseLocation = palm.position;
     }
 
     // Update is called once per frame
@@ -66,10 +68,27 @@ public class CarMoving : MonoBehaviour {
 
         fistHolding = fistDegree < fistThreshold;
 
+
+        if (fistHolding) {
+            // TODO: Apply force here to the car
+
+            Rigidbody carBody = GetComponent<Rigidbody>();
+            if (carBody) {
+                var acceleration = (palm.position - baseLocation) * 75f;
+                acceleration.y = 0; // ! explicitly remove the y components
+                carBody.AddForce(acceleration, ForceMode.Acceleration);
+                Debug.Log(string.Format("Adding acceleration to car in direction: {0}, {1}, {2}", acceleration.x, acceleration.y, acceleration.z));
+            }
+        }
+
         if (fistHolding && !cubeScaled) {
+
+
             debugCube.localScale *= 1.5f;
             cubeScaled = true;
         } else if (!fistHolding && cubeScaled) {
+            // ! update base location when the first unfolding FixedUpdate is called.
+            baseLocation = palm.position;
             debugCube.localScale /= 1.5f;
             cubeScaled = false;
         }

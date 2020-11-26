@@ -2655,7 +2655,7 @@ PrefabInstance:
     - target: {fileID: 5587141455387509252, guid: 602d532e54f64d440bb006ab1b355902,
         type: 3}
       propertyPath: m_Name
-      value: car
+      value: CarMoving
       objectReference: {fileID: 0}
     - target: {fileID: 5587141455387509253, guid: 602d532e54f64d440bb006ab1b355902,
         type: 3}
@@ -2816,6 +2816,11 @@ PrefabInstance:
         type: 3}
       propertyPath: fistThreshold
       value: 0.085
+      objectReference: {fileID: 0}
+    - target: {fileID: 7738518456835231963, guid: 602d532e54f64d440bb006ab1b355902,
+        type: 3}
+      propertyPath: m_Drag
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 602d532e54f64d440bb006ab1b355902, type: 3}
